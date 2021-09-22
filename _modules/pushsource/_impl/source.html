@@ -6,13 +6,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pushsource._impl.source &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -59,22 +58,68 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<span class="k">class</span> <span class="nc">SourceWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># Internal class to ensure that all source instances support enter/exit</span>
+    <span class="c1"># for with statements even if underlying instance doesn&#39;t implement it</span>
+    <span class="c1"># (since it originally was not mandatory).</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span> <span class="o">=</span> <span class="n">delegate</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__delegate</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_maybe_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">delegate</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">delegate</span><span class="p">,</span> <span class="s2">&quot;__enter__&quot;</span><span class="p">):</span>
+            <span class="c1"># no wrapping needed</span>
+            <span class="k">return</span> <span class="n">delegate</span>
+        <span class="c1"># wrap with a no-op enter/exit</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">delegate</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="Source"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source">[docs]</a><span class="k">class</span> <span class="nc">Source</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A source of push items.</span>
 
 <span class="sd">    This base class defines the interface for all pushsource backends.</span>
 <span class="sd">    Instances of a specific backend can be obtained using</span>
 <span class="sd">    the :meth:`~pushsource.Source.get` method.</span>
+
+<span class="sd">    Though not mandatory, instances of ``Source`` are preferably used</span>
+<span class="sd">    via ``with`` statements to ensure that all resources are cleaned up</span>
+<span class="sd">    when no longer needed, as in example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        with Source.get(&#39;some-url&#39;) as source:</span>
+<span class="sd">            for item in source:</span>
+<span class="sd">                do_something(item)</span>
+
+<span class="sd">    Note that the items produced by a source are not bound to the lifecycle</span>
+<span class="sd">    of a source instance, so it&#39;s safe to store them and continue using</span>
+<span class="sd">    them beyond the end of the ``with`` statement.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_BACKENDS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_BACKENDS_BUILTIN</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Source.__iter__"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Iterate over the push items contained within this source.</span>
 
 <span class="sd">        Yields a series of :class:`~pushsource.PushItem` instances.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Source.get"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.get">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -190,8 +235,9 @@
 
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">partial_source</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">inner_kwargs</span><span class="p">):</span>
-            <span class="n">url_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">url_kwargs</span><span class="p">)</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">url_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inner_kwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">SourceWrapper</span><span class="o">.</span><span class="n">_maybe_wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">(</span><span class="o">*</span><span class="n">inner_args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">partial_source</span></div>
 
@@ -223,7 +269,28 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">factory</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected callable, got: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">factory</span><span class="p">))</span>
 
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div></div>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_register_backend_builtin</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
+        <span class="c1"># Private equivalent of register_backend which also flags the</span>
+        <span class="c1"># backend as built-in, i.e. it will be restored on a call to reset.</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">factory</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_BUILTIN</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span>
+
+<div class="viewcode-block" id="Source.reset"><a class="viewcode-back" href="../../../sources/base.html#pushsource.Source.reset">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reset the library to the default configuration.</span>
+
+<span class="sd">        This method will undo the effect of any prior calls to</span>
+<span class="sd">        :meth:`~pushsource.Source.register_backend`, restoring only the</span>
+<span class="sd">        default backends provided by the pushsource library.</span>
+
+<span class="sd">        This may be used from within tests to ensure a known state.</span>
+
+<span class="sd">        .. versionadded:: 2.6.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_BACKENDS_BUILTIN</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
 </pre></div>
 
           </div>
@@ -246,7 +313,7 @@
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../userguide.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../sources/base.html">Source</a></li>
@@ -258,6 +325,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../model/rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../model/modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../model/errata.html">Push items: errata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../model/containers.html">Push items: containers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../model/ami.html">Push items: AMI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../model/productid.html">Push items: productid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../model/comps.html">Push items: comps.xml</a></li>
@@ -289,7 +357,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -311,7 +379,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
