@@ -66,6 +66,8 @@
       <ul>
         <li><a href="sources/koji.html#pushsource.KojiSource.__init__">(pushsource.KojiSource method)</a>
 </li>
+        <li><a href="sources/registry.html#pushsource.RegistrySource.__init__">(pushsource.RegistrySource method)</a>
+</li>
         <li><a href="sources/staged.html#pushsource.StagedSource.__init__">(pushsource.StagedSource method)</a>
 </li>
       </ul></li>
@@ -157,10 +159,10 @@
         <li><a href="model/files.html#pushsource.FilePushItem.description">(pushsource.FilePushItem attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/base.html#pushsource.PushItem.dest">dest (pushsource.PushItem attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="model/containers.html#pushsource.ContainerImagePushItem.dest_signing_key">dest_signing_key (pushsource.ContainerImagePushItem attribute)</a>
 </li>
       <li><a href="model/containers.html#pushsource.ContainerImageDigestPullSpec.digest">digest (pushsource.ContainerImageDigestPullSpec attribute)</a>
@@ -168,6 +170,10 @@
       <li><a href="model/containers.html#pushsource.ContainerImagePullInfo.digest_spec_for_type">digest_spec_for_type() (pushsource.ContainerImagePullInfo method)</a>
 </li>
       <li><a href="model/containers.html#pushsource.ContainerImagePullInfo.digest_specs">digest_specs (pushsource.ContainerImagePullInfo attribute)</a>
+</li>
+      <li><a href="model/directory.html#pushsource.DirectoryPushItem">DirectoryPushItem (class in pushsource)</a>
+</li>
+      <li><a href="model/files.html#pushsource.FilePushItem.display_order">display_order (pushsource.FilePushItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -363,6 +369,8 @@
 </li>
       <li><a href="model/containers.html#pushsource.ContainerImagePullSpec.registry">registry (pushsource.ContainerImagePullSpec attribute)</a>
 </li>
+      <li><a href="sources/registry.html#pushsource.RegistrySource">RegistrySource (class in pushsource)</a>
+</li>
       <li><a href="model/ami.html#pushsource.AmiPushItem.release">release (pushsource.AmiPushItem attribute)</a>
 
       <ul>
@@ -540,9 +548,11 @@
 <li class="toctree-l1"><a class="reference internal" href="sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sources/registry.html">Source: registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model/directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model/errata.html">Push items: errata</a></li>
@@ -598,7 +608,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -40,12 +40,12 @@ documented here.</p>
 <p>Every push item class has the following properties:</p>
 <ul class="simple">
 <li><p>push item classes use <a class="reference external" href="http://www.attrs.org/en/stable/">attrs</a>.</p></li>
-<li><p>instances are immutable; use helper functions such as <a class="reference external" href="https://www.attrs.org/en/stable/api.html#attr.evolve" title="(in attrs v21.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">attr.evolve()</span></code></a>
+<li><p>instances are immutable; use helper functions such as <code class="xref py py-func docutils literal notranslate"><span class="pre">attr.evolve()</span></code>
 to obtain a modified push item.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.PushItem">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">PushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.PushItem" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">PushItem</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#PushItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.PushItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>A PushItem represents a single piece of content to be published.
 This may be an RPM, an advisory, a generic file, and so on.</p>
 <p><strong>Attributes:</strong></p>
@@ -254,7 +254,7 @@ the item does not reference a file).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pushsource.KojiBuildInfo">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiBuildInfo</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#KojiBuildInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiBuildInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushsource.</span></span><span class="sig-name descname"><span class="pre">KojiBuildInfo</span></span><a class="reference internal" href="../_modules/pushsource/_impl/model/base.html#KojiBuildInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushsource.KojiBuildInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>A representation of a koji build.</p>
 <p><strong>Attributes:</strong></p>
 <ul class="simple">
@@ -329,9 +329,11 @@ the item does not reference a file).</p>
 <li class="toctree-l1"><a class="reference internal" href="../sources/base.html">Source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/staged.html">Source: staged</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/koji.html">Source: koji</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sources/registry.html">Source: registry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modulemd.html">Push items: modulemd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errata.html">Push items: errata</a></li>
@@ -389,7 +391,7 @@ the item does not reference a file).</p>
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
