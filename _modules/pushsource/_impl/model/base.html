@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +11,9 @@
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
    
@@ -35,9 +37,11 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">frozenlist2</span> <span class="kn">import</span> <span class="n">frozenlist</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">compat_attr</span> <span class="k">as</span> <span class="n">attr</span>
+<span class="kn">from</span> <span class="nn">.cache</span> <span class="kn">import</span> <span class="n">TinyCache</span>
 <span class="kn">from</span> <span class="nn">.conv</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">md5str</span><span class="p">,</span>
     <span class="n">sha256str</span><span class="p">,</span>
@@ -127,7 +131,11 @@
 <span class="sd">    If the push item does not represent a file, this will generally be omitted.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">dest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span> <span class="n">converter</span><span class="o">=</span><span class="n">frozenlist</span><span class="p">)</span>
+    <span class="n">dest</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">attr</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">),</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">frozenlist</span><span class="p">,</span> <span class="n">frozenlist</span><span class="p">),</span>
+    <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;Destination of this push item.</span>
 
 <span class="sd">    The meaning of &quot;dest&quot; differs depending on the source used and its configuration.</span>
@@ -156,7 +164,9 @@
 <span class="sd">        :meth:`with_checksums`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">)</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;A string representing the origin of this push item.</span>
 
 <span class="sd">    The &quot;origin&quot; field is expected to record some info on how this push item</span>
@@ -182,7 +192,10 @@
         <span class="k">return</span> <span class="n">KojiBuildInfo</span><span class="o">.</span><span class="n">_from_nvr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">)</span>
 
     <span class="n">signing_key</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">(</span>
-        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span> <span class="n">converter</span><span class="o">=</span><span class="n">upper_if_str</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">optional_str</span><span class="p">,</span>
+        <span class="n">converter</span><span class="o">=</span><span class="n">TinyCache</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">,</span> <span class="n">upper_if_str</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="sd">&quot;&quot;&quot;If this push item was GPG signed, this should be an identifier for the</span>
 <span class="sd">    signing key used.</span>
@@ -236,7 +249,7 @@
         <span class="n">hashers</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">md5sum</span><span class="p">:</span>
-            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span> <span class="s2">&quot;md5sum&quot;</span><span class="p">))</span>
+            <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;md5&quot;</span><span class="p">),</span> <span class="s2">&quot;md5sum&quot;</span><span class="p">))</span>  <span class="c1"># nosec B324</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sha256sum</span><span class="p">:</span>
             <span class="n">hashers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;sha256&quot;</span><span class="p">),</span> <span class="s2">&quot;sha256sum&quot;</span><span class="p">))</span>
 
@@ -293,6 +306,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../sources/errata.html">Source: errata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/base.html">Push items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/files.html">Push items: file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../model/cgw.html">Push items: cgw</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/directory.html">Push items: directory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/rpm.html">Push items: RPM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../model/modulemd.html">Push items: modulemd</a></li>
@@ -334,7 +348,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -351,7 +365,7 @@
       &copy;2020, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
