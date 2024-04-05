@@ -135,6 +135,8 @@ definitions:
                 $ref: "#/definitions/optional_string"
             version_title:
                 $ref: "#/definitions/optional_string"
+            marketplace_title_template:
+                $ref: "#/definitions/optional_string"
             security_groups:
                 type:
                     - array
@@ -172,6 +174,18 @@ definitions:
                                 type: number
                                 minimum: 0
                                 maximum: 65536
+
+            access_endpoint_url:
+                type:
+                - object
+                - "null"
+                properties:
+                    port:
+                        type: number
+                        minimum: 0
+                        maximum: 65536
+                    protocol:
+                        enum: ["http", "https"]
 
         required:
         - release
