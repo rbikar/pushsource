@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>User Guide &#8212; pushsource  documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=32913b9a" />
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -182,7 +182,7 @@ depending on the type of content loaded by the source.  For example, RPMs will b
 yielded as instances of <a class="reference internal" href="model/rpm.html#pushsource.RpmPushItem" title="pushsource.RpmPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">RpmPushItem</span></code></a> and errata will be yielded
 as instances of <a class="reference internal" href="model/errata.html#pushsource.ErratumPushItem" title="pushsource.ErratumPushItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErratumPushItem</span></code></a>.</p>
 <p>Commonly, different kinds of processing will be needed for different kinds of push items.
-In this case, it’s recommended to use <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.12)"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> checks to dispatch each push
+In this case, it’s recommended to use <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.13)"><code class="xref py py-func docutils literal notranslate"><span class="pre">isinstance()</span></code></a> checks to dispatch each push
 item appropriately.</p>
 <p>Consider tolerating push items of an unknown type (perhaps with a warning). This will ensure
 your code is forwards-compatible with later versions of this library, which may add new types
@@ -283,7 +283,7 @@ pre-filled.</p>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">pushsource</a></h1>
 
@@ -378,7 +378,7 @@ pre-filled.</p>
       &#169;2020, Red Hat.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
